@@ -4,6 +4,12 @@
  * common definitions & short-hand functions
  */
 
+#ifndef UTILS_H
+#define UTILS_H
+
+
+#include "main.h"
+
 #define true (1)
 #define false (0)
 
@@ -33,3 +39,6 @@ typedef union {
 	};
 	u16 val;
 } Short_Bytes_t;
+
+
+#endif

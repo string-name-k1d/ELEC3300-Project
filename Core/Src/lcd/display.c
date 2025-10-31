@@ -5,9 +5,9 @@
  *      Author: dik21
  */
 #include "lcd/display.h"
+#include "robot_hand/hand_control.h"
 
 #include "string.h"
-#include "utils/utils.h"
 
 #include "cmsis_os.h"
 

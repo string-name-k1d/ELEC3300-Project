@@ -13,7 +13,6 @@
 #include "utils/utils.h"
 
 
-
 #define DISP_MAX_ROW (LCD_DispWindow_PAGE / HEIGHT_EN_CHAR)
 #define DISP_MAX_COL (LCD_DispWindow_COLUMN / WIDTH_EN_CHAR)
 
@@ -68,6 +67,6 @@ void disp_clear(void);
 void disp_page_update(void);
 void disp_set_page(Display_Page_t page);
 
-void display_task(void* const argguments);
+void display_task(void* const arguments);
 
 #endif /* INC_LCD_DISPLAY_H_ */

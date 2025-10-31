@@ -21,8 +21,10 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Core/Src/communication \
 Core/Src \
 Core/Src/lcd \
+Core/Src/robot_hand \
 Core/Startup \
 Core/ThreadSafe \
 Drivers/STM32F1xx_HAL_Driver/Src \

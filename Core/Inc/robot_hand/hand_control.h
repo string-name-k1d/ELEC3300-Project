@@ -51,7 +51,7 @@ void rh_controller_set_hand(RH_State_t tar);
 
 u8 rh_controller_page(u8 r);
 
-void rh_controller_task();
+void rh_controller_task(void * const args);
 
 
 #endif /* INC_ROBOT_HAND_HAND_CONTROL_H_ */

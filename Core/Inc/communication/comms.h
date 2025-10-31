@@ -9,6 +9,7 @@
 #define INC_COMMUNICATION_COMMS_H_
 
 #include "utils/utils.h"
+#include "robot_hand/hand_defines.h"
 
 
 #define COMMS_MAX_BUF_SIZE		  100 // unit: byte
