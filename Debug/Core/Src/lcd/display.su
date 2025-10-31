@@ -1,0 +1,11 @@
+../Core/Src/lcd/display.c:19:28:disp_get_buf_addr	16	static
+../Core/Src/lcd/display.c:38:20:disp_set_N_contam	24	static
+../Core/Src/lcd/display.c:50:6:disp_init	8	static
+../Core/Src/lcd/display.c:57:6:disp_print_i	48	static
+../Core/Src/lcd/display.c:85:6:disp_print_f	40	static
+../Core/Src/lcd/display.c:90:6:disp_print_s	40	static
+../Core/Src/lcd/display.c:101:6:disp_update	24	static
+../Core/Src/lcd/display.c:122:6:disp_page	40	static
+../Core/Src/lcd/display.c:142:13:disp_set_page	16	static
+../Core/Src/lcd/display.c:146:6:disp_clear	8	static
+../Core/Src/lcd/display.c:150:6:display_task	24	static
