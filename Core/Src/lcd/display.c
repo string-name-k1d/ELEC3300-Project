@@ -5,8 +5,8 @@
  *      Author: dik21
  */
 #include "lcd/display.h"
-#include "robot_hand/hand_control.h"
 
+#include "robot_hand/hand_control.h"
 #include "string.h"
 
 #include "cmsis_os.h"
@@ -14,49 +14,39 @@
 
 static Display_Handle_t disp = {
 	.buf = {},
-	.contam = {},
+	.cur_screen = 0,
 	.cur_page = HOME_PAGE,
 	.flags = 0,
 };
 
-__forceinline char* const disp_get_buf_addr(u8 row, u8 col) { return &disp.buf[row * DISP_MAX_COL + col]; }
+// ============================================
+// ============================================
 
-static __forceinline u8 disp_get_contam(u16 enc_val) { return (disp.contam[enc_val / 8] >> (enc_val % 8)) & 0x01; }
+__forceinline char* const disp_get_buf_addr(DISP_COORDS) { return &disp.buf[disp.cur_screen][DISP_COORDS_FLATTENED]; }
 
-static __forceinline void disp_set_contam(u16 enc_val) { disp.contam[enc_val / 8] |= 0x01 << (enc_val % 8); }
-
-static __forceinline void disp_reset_contam(u16 enc_val) { disp.contam[enc_val / 8] &= ~(0x01 << (enc_val % 8)); }
-
-/**
- * @brief: sets n bits in contam array
- */
-__forceinline void disp_set_N_contam(u16 start, u16 n) {
-	u8 start_byte_offset = start % 8;
-	u8 end_byte_offset = (start + n) % 8;
-	u8 start_byte_idx = start / 8;
-	u8 end_byte_idx = (start + n) / 8;
-	u8 n_byte_copied = end_byte_idx - start_byte_idx + (end_byte_offset == 0) - (start_byte_offset != 0);
-
-	memset(&disp.contam[start_byte_idx + (start_byte_offset != 0)], 0xFF, n_byte_copied);
-	disp.contam[start_byte_idx] |= ~((0x01 << start_byte_offset) - 1);
-	disp.contam[end_byte_idx] |= ((0x01 << end_byte_offset) - 1);
+static __forceinline bool disp_changed(DISP_COORDS) {
+	return disp.buf[disp.cur_screen][DISP_COORDS_FLATTENED] != disp.buf[1 ^ disp.cur_screen][DISP_COORDS_FLATTENED];
 }
+
+// ============================================
+// ============================================
 
 void disp_init(void) {
 	LCD_INIT();
-	disp.tft_last_update_tick = get_tick();
 	disp.page_last_update_tick = get_tick();
 }
 
-
+/**
+ * @deprecated
+ * type specific printing functions
+ */
 void disp_print_i(DISP_COORDS, int i) {
 #define MAX_INT_LEN 12
 	char _buf[MAX_INT_LEN] = {};
 	char* cur = &_buf[MAX_INT_LEN - 2];
 
 	if (i == 0) {
-		disp.buf[(u16)row * DISP_MAX_COL + col] = '0';
-		disp_set_contam((u16)row * DISP_MAX_COL + col);
+		disp.buf[disp.cur_screen][(u16)row * DISP_MAX_COL + col] = '0';
 		return;
 	}
 
@@ -73,48 +63,33 @@ void disp_print_i(DISP_COORDS, int i) {
 
 	*cur = _buf[0];
 
-	strcpy(&disp.buf[(u16)row * DISP_MAX_COL + col], _buf);
-	disp_set_N_contam((u16)row * DISP_MAX_COL + col, _buf + MAX_INT_LEN - 1 - cur);
+	strcpy(disp_get_buf_addr(row, col), _buf);
 }
 
-void disp_print_f(DISP_COORDS, float f) {
-	sprintf(disp_get_buf_addr(row, col), "%f", f);
-	disp_set_N_contam((u16)row * DISP_MAX_COL + col, strlen(disp_get_buf_addr(row, col)));
-}
+void disp_print_f(DISP_COORDS, float f) { sprintf(disp_get_buf_addr(row, col), "%f", f); }
 
-void disp_print_s(DISP_COORDS, const char* str) {
-	strcpy(&disp.buf[(u16)row * DISP_MAX_COL + col], str);
-	disp_set_N_contam((u16)row * DISP_MAX_COL + col, strlen(str));
-}
+void disp_print_s(DISP_COORDS, const char* str) { strcpy(disp_get_buf_addr(row, col), str); }
 
-// void disp_print(u8 row, u8 col, const char* txt, ...) {
-//	va_list args;
-//	va_start(args, txt);
-//
-//}
 
-void disp_update(u32 tick) {
-	if (tick - disp.tft_last_update_tick < 50)
-		return;
-
-	for (u16 i = 0; i < DISP_MAX_ROW * DISP_MAX_COL; ++i) {
-		if (disp_get_contam(i)) {
-			LCD_DrawChar(i % DISP_MAX_COL * WIDTH_EN_CHAR, i / DISP_MAX_COL * HEIGHT_EN_CHAR, disp.buf[i]);
+void disp_update(void) {
+	// task
+	for (u8 r = 0; r < DISP_MAX_ROW; ++r) {
+		for (u8 c = 0; c < DISP_MAX_COL; ++c) {
+			if (disp_changed(r, c)) {
+				// u8 consec_changed = 1;
+				// while (c + consec_changed < DISP_MAX_COL && !disp_changed(r, c + consec_changed))
+				// 	++consec_changed;
+				// LCD_DrawString(c, r, disp_get_buf_addr(r, c));
+				LCD_DrawChar(c * WIDTH_EN_CHAR, r * HEIGHT_EN_CHAR,
+							 disp.buf[disp.cur_screen][(u16)r * DISP_MAX_COL + c]);
+			}
 		}
 	}
-	//	for (u8 r = 0; r < DISP_MAX_ROW; ++r) {
-	//		for (u8 c = 0; c < DISP_MAX_COL; ++c) {
-	//			if (disp_get_contam(r, c)) {
-	//				LCD_DrawStringN(c, r, disp.buf[r * DISP_MAX_COL + c], DISP_MAX_ROW);
-	//			}
-	//		}
-	//	}
 
-	memset(disp.contam, 0x00, sizeof(disp.contam));
-	disp.tft_last_update_tick = tick;
+	disp.cur_screen ^= 1; // toggle screen buffer
 }
 
-void disp_page(u32 tick) {
+static void disp_page(u32 tick) {
 	if (tick - disp.page_last_update_tick < 20)
 		return;
 
@@ -133,7 +108,7 @@ void disp_page(u32 tick) {
 		default: break;
 	}
 
-	disp_update(50);
+	disp_update();
 	disp.page_last_update_tick = tick;
 }
 
@@ -141,7 +116,7 @@ inline void disp_set_page(Display_Page_t page) { disp.cur_page = page; }
 
 void disp_clear(void) { memset(disp.buf, 0, DISP_MAX_ROW * DISP_MAX_COL); }
 
-void display_task(void* const argguments) {
+void display_task(void* const arguments) {
 	disp_init();
 	osDelay(100);
 

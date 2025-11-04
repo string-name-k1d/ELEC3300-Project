@@ -15,11 +15,13 @@
 
 #define __forceinline __attribute__((always_inline)) inline
 
-#define ABS(val)	((val < 0)? -val: val)
+#define ABS(val)					((val < 0) ? -val : val)
 #define IN_RANGE(val, lower, upper) (val > lower) && (val < upper)
-#define get_tick()	HAL_GetTick()
-#define min(a,b)	((a < b)? a: b)
-#define max(a,b)	((a > b)? a: b)
+#define get_tick()					HAL_GetTick()
+#define min(a, b)					((a < b) ? a : b)
+#define max(a, b)					((a > b) ? a : b)
+
+#define for_u8(var, start, end) for (u8 var = start; var < end; ++var)
 
 typedef int8_t i8;
 typedef int16_t i16;
