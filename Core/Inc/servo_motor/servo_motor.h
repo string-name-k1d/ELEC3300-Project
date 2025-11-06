@@ -10,11 +10,27 @@
 
 #include "utils/utils.h"
 
+// =============================================================================================================
+// =============================================================================================================
+
+#define SERVO_TIM_CLK_FREQ	(72000000)
+#define SERVO_PSC	(u16)(0)	// TODO: change
+#define SERVO_ARR	(u16)(0)
+
+#define SERVO_FREQ	SERVO_TIM_CLK_FREQ / (SERVO_PSC + 1) / (SERVO_ARR + 1)
+#define SERVO_PERIOD
+#define SERVO_MAX_ON_TIME
+#define SERVO_MIN_ON_TIME
+
 #define SERVO_MAX_ANGLE 90.f
 #define SERVO_MAX_DUTY 1.f
 #define SERVO_MIN_DUTY 0.5f
 
 #define NUM_SERVOS 5
+
+
+// =============================================================================================================
+// =============================================================================================================
 
 typedef struct {
 	struct {
@@ -30,7 +46,11 @@ typedef struct {
 } Servo_Controller_t;
 
 
-void servo_init(u8 servo_id, u8 tim, u8 ch);
+// =============================================================================================================
+// =============================================================================================================
+
+
+void servo_init(void);
 void servo_set_target_pos(u8 servo_id, u8 tar);
 i8 servo_get_pos(u8 servo_id);
 void servo_apply(u8 servo_id);
