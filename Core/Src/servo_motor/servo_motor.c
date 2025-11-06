@@ -9,10 +9,6 @@
 
 // ====================================================================================================================
 
-static Servo_Controller_t servo[NUM_SERVOS] = {};
-
-// ====================================================================================================================
-
 #define _s servo[servo_id]
 
 #define servo_angle_to_pos(angle) ((u8)(((float)angle / SERVO_MAX_ANGLE) * (u8)0xFF))
@@ -21,14 +17,18 @@ static Servo_Controller_t servo[NUM_SERVOS] = {};
 // ====================================================================================================================
 // ====================================================================================================================
 
+Servo_Controller_t servo[NUM_SERVOS] = {};
+
+// ====================================================================================================================
+
 
 void servo_init(void) {
 	for (u8 servo_id = 0; servo_id < NUM_SERVOS; ++servo_id) {
-	// if (!servo[servo_id].init) {
-	servo[servo_id].htim = servo_id / 4 + 2;
-	servo[servo_id].ch = servo_id % 4;
-	servo[servo_id].init = true;
-	// }
+		// if (!servo[servo_id].init) {
+		servo[servo_id].htim = servo_id / 4 + 2;
+		servo[servo_id].ch = servo_id % 4;
+		servo[servo_id].init = true;
+		// }
 	}
 
 	  TIM2->PSC = SERVO_PSC;
@@ -79,7 +79,9 @@ inline void servo_apply(u8 servo_id) {
 }
 
 void servo_update(u8 servo_id, u32 tick) {
-	servo[servo_id].cur = servo[servo_id].prev * (tick - servo[servo_id].last_set_pos_tick) + servo[servo_id].tar_pos;
+	u32 dt = tick - servo[servo_id].last_set_pos_tick;
+	servp[servo_id].cur = (float)_s.prev + dt * SERVO_SPEED * ((_s.tar_pos > _s.prev)? 1: -1);
+//	servo[servo_id].cur = (float)servo[servo_id].prev * (dt) + (float)servo[servo_id].tar_pos * (dt);
 	servo[servo_id].prev = servo[servo_id].cur;
 }
 
