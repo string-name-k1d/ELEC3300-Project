@@ -409,76 +409,76 @@ void LCD_DrawDot(uint16_t usCOLUMN, uint16_t usPAGE, uint16_t usColor) {
 }
 
 // Task 3
-void LCD_DrawEllipse(uint16_t usC, uint16_t usP, uint16_t SR, uint16_t LR, uint16_t usColor) {
-	/*
-	 *  Task 3 : Implement LCD_DrawEllipse by using LCD_DrawDot
-	 */
+// void LCD_DrawEllipse(uint16_t usC, uint16_t usP, uint16_t SR, uint16_t LR, uint16_t usColor) {
+// 	/*
+// 	 *  Task 3 : Implement LCD_DrawEllipse by using LCD_DrawDot
+// 	 */
 
-	//#define ANG_IT
+// 	//#define ANG_IT
 
-#ifdef ANG_IT
+// #ifdef ANG_IT
 
-	#define PI (3.141592653f)
+// 	#define PI (3.141592653f)
 
-	for (uint16_t the = 0; the < 720; ++the) {
-		float x = LR * cos(the * PI / 360) + usC;
-		float y = SR * sin(the * PI / 360) + usP;
-		LCD_DrawDot(x, y, usColor);
-	}
-#else
+// 	for (uint16_t the = 0; the < 720; ++the) {
+// 		float x = LR * cos(the * PI / 360) + usC;
+// 		float y = SR * sin(the * PI / 360) + usP;
+// 		LCD_DrawDot(x, y, usColor);
+// 	}
+// #else
 
-	#define sqr(x) (x * x)
-	// both works, same thing but was bored
+// 	#define sqr(x) (x * x)
+// 	// both works, same thing but was bored
 
-	__attribute__((always_inline)) float dist(x, y) {
-		float xd = sqr((float)x * SR);
-		float yd = sqr((float)y * LR);
-		float ret = (xd + yd) / sqr((float)SR * LR);
-		return (ret > 1.f) ? ret - 1.f : 1.f - ret;
-	}
+// 	__attribute__((always_inline)) float dist(x, y) {
+// 		float xd = sqr((float)x * SR);
+// 		float yd = sqr((float)y * LR);
+// 		float ret = (xd + yd) / sqr((float)SR * LR);
+// 		return (ret > 1.f) ? ret - 1.f : 1.f - ret;
+// 	}
 
-	//#define dist(x,y)\
-//	(float)({\
-//		float xd = sqr((float)(x) * SR);\
-//		float yd = sqr((float)(y) * LR);\
-//		float ret = (xd + yd) / sqr((float)SR*LR);\
-//		ret = (ret > 1.f)? ret - 1.f: 1.f - ret;\
-//		ret;\
-//	})
+// 	//#define dist(x,y)\
+// //	(float)({\
+// //		float xd = sqr((float)(x) * SR);\
+// //		float yd = sqr((float)(y) * LR);\
+// //		float ret = (xd + yd) / sqr((float)SR*LR);\
+// //		ret = (ret > 1.f)? ret - 1.f: 1.f - ret;\
+// //		ret;\
+// //	})
 
-	int32_t x, y; // offsets
+// 	int32_t x, y; // offsets
 
-	x = LR;
-	y = 0;
+// 	x = LR;
+// 	y = 0;
 
-	while (x >= 0 && y <= SR) {
-		// draw symmetrically
-		LCD_DrawDot(usC + x, usP + y, usColor);
-		LCD_DrawDot(usC - x, usP + y, usColor);
-		LCD_DrawDot(usC + x, usP - y, usColor);
-		LCD_DrawDot(usC - x, usP - y, usColor);
+// 	while (x >= 0 && y <= SR) {
+// 		// draw symmetrically
+// 		LCD_DrawDot(usC + x, usP + y, usColor);
+// 		LCD_DrawDot(usC - x, usP + y, usColor);
+// 		LCD_DrawDot(usC + x, usP - y, usColor);
+// 		LCD_DrawDot(usC - x, usP - y, usColor);
 
-		// try to find best match neighbor by iteration
-		float closest_continuous_pt = dist(x - 1, y);
-		uint8_t closest_set = 0;
+// 		// try to find best match neighbor by iteration
+// 		float closest_continuous_pt = dist(x - 1, y);
+// 		uint8_t closest_set = 0;
 
-		static const int8_t dir_vec[3][2] = {
-			{-1, 0},
-			{-1, 1},
-			{0, 1},
-		};
+// 		static const int8_t dir_vec[3][2] = {
+// 			{-1, 0},
+// 			{-1, 1},
+// 			{0, 1},
+// 		};
 
-		for (uint8_t i = 1; i < 3; ++i) {
-			if (dist(x + dir_vec[i][0], y + dir_vec[i][1]) < closest_continuous_pt) {
-				closest_continuous_pt = dist(x + dir_vec[i][0], y + dir_vec[i][1]);
-				closest_set = i;
-			}
-		}
+// 		for (uint8_t i = 1; i < 3; ++i) {
+// 			if (dist(x + dir_vec[i][0], y + dir_vec[i][1]) < closest_continuous_pt) {
+// 				closest_continuous_pt = dist(x + dir_vec[i][0], y + dir_vec[i][1]);
+// 				closest_set = i;
+// 			}
+// 		}
 
-		// move x y
-		x += dir_vec[closest_set][0];
-		y += dir_vec[closest_set][1];
-	}
+// 		// move x y
+// 		x += dir_vec[closest_set][0];
+// 		y += dir_vec[closest_set][1];
+// 	}
 
-#endif
-}
+// #endif
+// }
