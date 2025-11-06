@@ -1,5 +1,6 @@
 /*
  * modbus.h
+ * @deprecated
  *
  * modbus protocol transceiver
  */

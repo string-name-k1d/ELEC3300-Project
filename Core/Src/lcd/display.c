@@ -25,14 +25,16 @@ static Display_Handle_t disp = {
 __forceinline char* const disp_get_buf_addr(DISP_COORDS) { return &disp.buf[disp.cur_screen][DISP_COORDS_FLATTENED]; }
 
 static __forceinline bool disp_changed(DISP_COORDS) {
-	return disp.buf[disp.cur_screen][DISP_COORDS_FLATTENED] != disp.buf[1 ^ disp.cur_screen][DISP_COORDS_FLATTENED];
+	return disp.buf[disp.cur_screen][DISP_COORDS_FLATTENED] != disp.buf[0x01 ^ disp.cur_screen][DISP_COORDS_FLATTENED];
 }
 
 // ============================================
 // ============================================
 
 void disp_init(void) {
+	__disable_irq();
 	LCD_INIT();
+	__enable_irq();
 	disp.page_last_update_tick = get_tick();
 }
 
@@ -63,7 +65,7 @@ void disp_print_i(DISP_COORDS, int i) {
 
 	*cur = _buf[0];
 
-	strcpy(disp_get_buf_addr(row, col), _buf);
+	strcpy(disp_get_buf_addr(row, col), cur);
 }
 
 void disp_print_f(DISP_COORDS, float f) { sprintf(disp_get_buf_addr(row, col), "%f", f); }
@@ -72,7 +74,9 @@ void disp_print_s(DISP_COORDS, const char* str) { strcpy(disp_get_buf_addr(row, 
 
 
 void disp_update(void) {
-	// task
+
+	__disable_irq();
+
 	for (u8 r = 0; r < DISP_MAX_ROW; ++r) {
 		for (u8 c = 0; c < DISP_MAX_COL; ++c) {
 			if (disp_changed(r, c)) {
@@ -86,21 +90,24 @@ void disp_update(void) {
 		}
 	}
 
+	__enable_irq();
+
 	disp.cur_screen ^= 1; // toggle screen buffer
 }
 
 static void disp_page(u32 tick) {
-	if (tick - disp.page_last_update_tick < 20)
-		return;
+//	if (tick - disp.page_last_update_tick < 20)
+//		return;
 
 	u8 r = 0;
 
-	disp_print(0, 0, "Test");
-	disp_print_i(0, r++, get_tick());
+	disp_print(0, r++, "Test");
+	disp_print(0, r++, "%lu", get_tick());
+//	disp_print_i(r++, 0, get_tick());
 
 	switch (disp.cur_page) {
 		case HOME_PAGE: {
-			disp_print_s(DISP_MAX_COL / 2 - 4, DISP_MAX_ROW - 1, "HOME");
+			disp_print_s(DISP_MAX_COL / 2 - 2, DISP_MAX_ROW - 1, "HOME");
 		} break;
 		case RH_PAGE: {
 			r = rh_controller_page(r);
@@ -116,13 +123,15 @@ inline void disp_set_page(Display_Page_t page) { disp.cur_page = page; }
 
 void disp_clear(void) { memset(disp.buf, 0, DISP_MAX_ROW * DISP_MAX_COL); }
 
-void display_task(void* const arguments) {
+void display_task(void const * arguments) {
 	disp_init();
-	osDelay(100);
+//	osDelay(100);
 
 	u32 last_tick = get_tick();
 	while (1) {
 		osDelayUntil(&last_tick, 1);
 		disp_page(last_tick);
+//		disp_page(get_tick());
+		osDelay(100);
 	}
 }

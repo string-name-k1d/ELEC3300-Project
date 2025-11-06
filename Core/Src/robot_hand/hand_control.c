@@ -17,8 +17,10 @@ static RH_Controller_t rh = {
 
 };
 
-
-void rh_controller_set_hand(RH_State_t tar) {}
+inline void rh_controller_set_finger_pos(u8 fid, u8 pos) {}
+inline void rh_controller_set_hand_pos(u8* pos) {}
+inline void rh_controller_set_hand_state(RH_State_t tar) {}
+inline void rh_controller_apply_finger_pos(u8 fid) {}
 
 void rh_controller_set_state(RH_Controller_State state) {
 	if (state == rh.state) {
@@ -44,7 +46,7 @@ __forceinline bool rh_controller_check_state(RH_Controller_State state) { return
 // ======== Control FSM Control Task ========== //
 // ============================================ //
 
-void rh_controller_init(void) {}
+void rh_controller_init(void) { rh.state = RH_IDLE; }
 
 void rh_controller_fsm(void) {
 	switch (rh.state) {
@@ -60,7 +62,12 @@ void rh_controller_fsm(void) {
 	}
 }
 
-void rh_controller_apply(void) {}
+void rh_controller_apply(void) {
+	for (u8 f_id; f_id < NUM_FINGERS; ++f_id) {
+		rh_controller_apply_finger_pos(f_id);
+		// Here you would add the code to actually move the finger hardware to finger->pos
+	}
+}
 
 
 void rh_controller_task(void* const args) {

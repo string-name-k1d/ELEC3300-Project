@@ -18,7 +18,6 @@ void Delay(__IO uint32_t nCount) {
 }
 
 void LCD_INIT(void) {
-	// lcdTaskHandle = xTaskGetCurrentTaskHandle();
 	LCD_BackLed_Control(ENABLE);
 	LCD_Rst();
 	LCD_REG_Config();

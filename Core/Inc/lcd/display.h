@@ -18,7 +18,7 @@
 
 #define DEFAULT_PAGE HOME_PAGE
 
-#define DISP_COORDS			   u8 row, u8 col
+#define DISP_COORDS			   u8 col, u8 row
 #define DISP_COORDS_FLATTENED  ((u16)row * DISP_MAX_COL + col)
 #define DISP_MAX_PRINT_BUF_LEN 30
 
@@ -54,7 +54,7 @@ extern inline char* const disp_get_buf_addr(u8 row, u8 col);
 
 void disp_init(void);
 
-#define disp_print(row, col, ...) sprintf(disp_get_buf_addr(row, col), __VA_ARGS__);
+#define disp_print(col, row, ...) sprintf(disp_get_buf_addr(col, row), __VA_ARGS__);
 
 
 void disp_update(void);
@@ -63,6 +63,6 @@ void disp_clear(void);
 void disp_page_update(void);
 void disp_set_page(Display_Page_t page);
 
-void display_task(void* const arguments);
+void display_task(void const * arguments);
 
 #endif /* INC_LCD_DISPLAY_H_ */

@@ -1,8 +1,7 @@
 /*
  * hand_defines.h
  *
- *  Created on: Oct 31, 2025
- *      Author: dik21
+ *
  */
 
 #ifndef INC_ROBOT_HAND_HAND_DEFINES_H_

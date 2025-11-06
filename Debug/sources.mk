@@ -25,6 +25,7 @@ Core/Src/communication \
 Core/Src \
 Core/Src/lcd \
 Core/Src/robot_hand \
+Core/Src/servo_motor \
 Core/Startup \
 Core/ThreadSafe \
 Drivers/STM32F1xx_HAL_Driver/Src \
