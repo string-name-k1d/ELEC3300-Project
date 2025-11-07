@@ -6,9 +6,9 @@
  */
 
 
-#include "robot_hand/hand_control.h"
+#include "Usr/robot_hand/hand_control.h"
 
-#include "lcd/display.h"
+#include "Usr/lcd/display.h"
 
 #include "cmsis_os.h"
 

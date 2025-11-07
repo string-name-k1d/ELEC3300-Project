@@ -8,23 +8,23 @@
 #ifndef INC_SERVO_MOTOR_SERVO_MOTOR_H_
 #define INC_SERVO_MOTOR_SERVO_MOTOR_H_
 
-#include "utils/utils.h"
+#include "Usr/utils/utils.h"
 
 // =============================================================================================================
 // =============================================================================================================
 
 #define SERVO_TIM_CLK_FREQ (72000000)
-#define SERVO_PSC		   (u16)(0) // TODO: change
-#define SERVO_ARR		   (u16)(0)
+#define SERVO_PSC		   (u16)(255) // TODO: change
+#define SERVO_ARR		   (u16)(5624)
 
-#define SERVO_FREQ SERVO_TIM_CLK_FREQ / (SERVO_PSC + 1) / (SERVO_ARR + 1)
-#define SERVO_PERIOD
-#define SERVO_MAX_ON_TIME
-#define SERVO_MIN_ON_TIME
+#define SERVO_FREQ		  50 // Hz
+#define SERVO_PERIOD	  (1 / SERVO_FREQ)
+#define SERVO_MAX_ON_TIME (2) // ms
+#define SERVO_MIN_ON_TIME (1) // ms
 
-#define SERVO_MAX_ANGLE 90.f
-#define SERVO_MAX_DUTY	1.f
-#define SERVO_MIN_DUTY	0.5f
+#define SERVO_MAX_ANGLE 180.f // [0, 180]
+#define SERVO_MAX_DUTY	0.1f  // 10%
+#define SERVO_MIN_DUTY	0.05f // 5%
 
 #define SERVO_SPEED 10.f // unit: deg / s
 

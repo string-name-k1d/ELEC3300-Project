@@ -8,9 +8,9 @@
 #ifndef INC_LCD_DISPLAY_H_
 #define INC_LCD_DISPLAY_H_
 
-#include "lcd/lcd.h"
+#include "Usr/lcd/lcd.h"
 #include "stdio.h"
-#include "utils/utils.h"
+#include "Usr/utils/utils.h"
 
 
 #define DISP_MAX_ROW (LCD_DispWindow_PAGE / HEIGHT_EN_CHAR)
@@ -49,7 +49,7 @@ typedef struct {
 } Display_Handle_t;
 
 
-extern char* const disp_get_buf_addr(u8 row, u8 col);
+char* const disp_get_buf_addr(u8 row, u8 col);
 
 
 void disp_init(void);

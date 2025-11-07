@@ -4,9 +4,9 @@
  *  Created on: Oct 28, 2025
  *      Author: dik21
  */
-#include "lcd/display.h"
+#include "Usr/lcd/display.h"
 
-#include "robot_hand/hand_control.h"
+#include "Usr/robot_hand/hand_control.h"
 #include "string.h"
 
 #include "cmsis_os.h"
@@ -102,7 +102,7 @@ static void disp_page(u32 tick) {
 	u8 r = 0;
 
 	disp_print(0, r++, "Test");
-	disp_print(0, r++, "%lu", get_tick());
+	disp_print(0, r++, "%d", get_tick());
 //	disp_print_i(r++, 0, get_tick());
 
 	switch (disp.cur_page) {

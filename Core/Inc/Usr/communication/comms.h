@@ -8,8 +8,8 @@
 #ifndef INC_COMMUNICATION_COMMS_H_
 #define INC_COMMUNICATION_COMMS_H_
 
-#include "utils/utils.h"
-#include "robot_hand/hand_defines.h"
+#include "Usr/utils/utils.h"
+#include "Usr/robot_hand/hand_defines.h"
 
 
 #define COMMS_MAX_BUF_SIZE		  100 // unit: byte

@@ -1,8 +1,8 @@
-#include "lcd/lcd.h"
+#include "Usr/lcd/lcd.h"
 
-#include "lcd/ascii.h"
+#include "Usr/lcd/ascii.h"
 #include "math.h"
-#include "utils/utils.h"
+#include "Usr/utils/utils.h"
 
 #include "cmsis_os.h"
 
