@@ -43,4 +43,14 @@ typedef union {
 } Short_Bytes_t;
 
 
+static inline float clamp(float val, float lower, float upper) {
+	if (val < lower)
+		return lower;
+	else if (val > upper)
+		return upper;
+	else
+		return val;
+}
+
+
 #endif

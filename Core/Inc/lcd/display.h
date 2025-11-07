@@ -49,7 +49,7 @@ typedef struct {
 } Display_Handle_t;
 
 
-extern inline char* const disp_get_buf_addr(u8 row, u8 col);
+extern char* const disp_get_buf_addr(u8 row, u8 col);
 
 
 void disp_init(void);
@@ -63,6 +63,6 @@ void disp_clear(void);
 void disp_page_update(void);
 void disp_set_page(Display_Page_t page);
 
-void display_task(void const * arguments);
+void display_task(void const* arguments);
 
 #endif /* INC_LCD_DISPLAY_H_ */

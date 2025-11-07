@@ -13,7 +13,7 @@
 #include "cmsis_os.h"
 
 
-static RH_Controller_t rh = {
+RH_Controller_t rh = {
 
 };
 
@@ -88,6 +88,7 @@ void rh_controller_task(void* const args) {
 
 u8 rh_controller_page(u8 r) {
 	disp_print(0, r++, "State: %d", rh.state);
-	disp_print(0, r++, "");
+	disp_print(0, r++, "Pos: %d, %d, %d, %d, %d", rh.finger[0].pos, rh.finger[1].pos, rh.finger[2].pos,
+			   rh.finger[3].pos, rh.finger[4].pos);
 	return r;
 }

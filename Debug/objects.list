@@ -11,6 +11,7 @@
 "./Core/Src/lcd/lcd.o"
 "./Core/Src/robot_hand/hand_control.o"
 "./Core/Src/servo_motor/servo_motor.o"
+"./Core/Src/utils/utils.o"
 "./Core/Startup/startup_stm32f103vetx.o"
 "./Core/ThreadSafe/newlib_lock_glue.o"
 "./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o"

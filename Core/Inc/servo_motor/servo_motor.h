@@ -13,18 +13,20 @@
 // =============================================================================================================
 // =============================================================================================================
 
-#define SERVO_TIM_CLK_FREQ	(72000000)
-#define SERVO_PSC	(u16)(0)	// TODO: change
-#define SERVO_ARR	(u16)(0)
+#define SERVO_TIM_CLK_FREQ (72000000)
+#define SERVO_PSC		   (u16)(0) // TODO: change
+#define SERVO_ARR		   (u16)(0)
 
-#define SERVO_FREQ	SERVO_TIM_CLK_FREQ / (SERVO_PSC + 1) / (SERVO_ARR + 1)
+#define SERVO_FREQ SERVO_TIM_CLK_FREQ / (SERVO_PSC + 1) / (SERVO_ARR + 1)
 #define SERVO_PERIOD
 #define SERVO_MAX_ON_TIME
 #define SERVO_MIN_ON_TIME
 
 #define SERVO_MAX_ANGLE 90.f
-#define SERVO_MAX_DUTY 1.f
-#define SERVO_MIN_DUTY 0.5f
+#define SERVO_MAX_DUTY	1.f
+#define SERVO_MIN_DUTY	0.5f
+
+#define SERVO_SPEED 10.f // unit: deg / s
 
 #define NUM_SERVOS 5
 
@@ -42,7 +44,7 @@ typedef struct {
 	u8 prev;
 	u8 tar_pos; // target position to reach
 
-	u32 last_set_pos_tick;
+	u32 last_apply_tick;
 } Servo_Controller_t;
 
 
@@ -53,6 +55,8 @@ typedef struct {
 void servo_init(void);
 void servo_set_target_pos(u8 servo_id, u8 tar);
 i8 servo_get_pos(u8 servo_id);
-void servo_apply(u8 servo_id);
+void servo_apply(void);
+void servo_update(u32 tick);
+void servo_task(void* const args);
 
 #endif /* INC_SERVO_MOTOR_SERVO_MOTOR_H_ */

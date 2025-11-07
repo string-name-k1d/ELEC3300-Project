@@ -16,6 +16,7 @@ RM := rm -rf
 -include Drivers/STM32F1xx_HAL_Driver/Src/subdir.mk
 -include Core/ThreadSafe/subdir.mk
 -include Core/Startup/subdir.mk
+-include Core/Src/utils/subdir.mk
 -include Core/Src/servo_motor/subdir.mk
 -include Core/Src/robot_hand/subdir.mk
 -include Core/Src/lcd/subdir.mk

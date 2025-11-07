@@ -40,13 +40,14 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef htim2;
+ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 
 SRAM_HandleTypeDef hsram1;
 
 osThreadId defaultTaskHandle;
 osThreadId displayTaskHandle;
+osThreadId ServoTaskHandle;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -59,6 +60,7 @@ static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
 void StartDefaultTask(void const * argument);
 extern void display_task(void const * argument);
+extern void servo_task(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -128,6 +130,10 @@ int main(void)
   /* definition and creation of displayTask */
   osThreadDef(displayTask, display_task, osPriorityLow, 0, 128);
   displayTaskHandle = osThreadCreate(osThread(displayTask), NULL);
+
+  /* definition and creation of ServoTask */
+  osThreadDef(ServoTask, servo_task, osPriorityAboveNormal, 0, 128);
+  ServoTaskHandle = osThreadCreate(osThread(ServoTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */

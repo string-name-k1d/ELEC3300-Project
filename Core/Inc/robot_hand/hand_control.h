@@ -58,10 +58,10 @@ void rh_controller_set_hand_state(RH_State_t tar);
 /**
  * Sets control logic state for hand
  */
-extern inline void rh_controller_set_finger_pos(u8 fid, u8 pos);
-extern inline void rh_controller_set_hand_pos(u8* pos);
+// extern inline void rh_controller_set_finger_pos(u8 fid, u8 pos);
+// extern inline void rh_controller_set_hand_pos(u8* pos);
 void rh_controller_set_state(RH_Controller_State state);
-extern inline bool rh_controller_check_state(RH_Controller_State state);
+// extern inline bool rh_controller_check_state(RH_Controller_State state);
 
 /**
  * Controls main logic flow for robot hand
