@@ -40,7 +40,7 @@ typedef struct {
 		u8 ch : 2;
 		u8 init : 1;
 	};
-	u8 cur; // estimated actual position
+	u8 pos; // estimated actual position
 	u8 prev;
 	u8 tar_pos; // target position to reach
 

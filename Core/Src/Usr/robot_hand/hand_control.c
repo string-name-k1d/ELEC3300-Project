@@ -12,14 +12,16 @@
 
 #include "cmsis_os.h"
 
+extern Servo_Controller_t servo[NUM_SERVOS];
 
 RH_Controller_t rh = {
-
+	.state = RH_IDLE,
+	.finger = servo,
 };
 
 inline void rh_controller_set_finger_pos(u8 fid, u8 pos) {}
 inline void rh_controller_set_hand_pos(u8* pos) {}
-inline void rh_controller_set_hand_state(RH_State_t tar) {}
+inline void rh_controller_set_hand_state(RH_Hand_State_t tar) {}
 inline void rh_controller_apply_finger_pos(u8 fid) {}
 
 void rh_controller_set_state(RH_Controller_State state) {

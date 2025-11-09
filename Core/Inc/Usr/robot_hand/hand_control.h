@@ -8,17 +8,13 @@
 #ifndef INC_ROBOT_HAND_HAND_CONTROL_H_
 #define INC_ROBOT_HAND_HAND_CONTROL_H_
 
-#include "hand_defines.h"
+#include "Usr/servo_motor/servo_motor.h"
 #include "Usr/utils/utils.h"
+#include "hand_defines.h"
 
 
-/**
- * Controls each finger movement
- */
-typedef struct {
-	u8 pos;
-	u8 tar_pos;
-} RH_Finger_t;
+// ====================================================================================================================
+// ====================================================================================================================
 
 /**
  * Represents physical hand state for each finger's position
@@ -29,7 +25,7 @@ typedef struct {
 	u8 finger_2_play : 1;
 	u8 finger_3_play : 1;
 	u8 finger_4_play : 1;
-} RH_State_t;
+} RH_Hand_State_t;
 
 /**
  * Logic control states for hand controller
@@ -46,14 +42,16 @@ typedef enum {
  */
 typedef struct {
 	RH_Controller_State state;
-	RH_Finger_t finger[NUM_FINGERS];
+	RH_Hand_State_t hand_state;
+
+	Servo_Controller_t* finger;
 } RH_Controller_t;
 
 
 /**
  * Sets target positions for the fingers
  */
-void rh_controller_set_hand_state(RH_State_t tar);
+void rh_controller_set_hand_state(RH_Hand_State_t tar);
 
 /**
  * Sets control logic state for hand
