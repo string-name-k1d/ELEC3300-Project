@@ -9,7 +9,7 @@
 #define INC_GLOVE_SENSOR_GLOVE_SENSOR_H_
 
 
-#include "robot_hand/hand_defines.h"
+#include "Usr/robot_hand/hand_defines.h"
 
 typedef struct {
 	float pos;
