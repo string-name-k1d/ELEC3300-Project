@@ -3,6 +3,7 @@
  */
 #include "Usr/lcd/display.h"
 
+#include "Usr/music_reader/midi_reader.h"
 #include "Usr/robot_hand/hand_control.h"
 #include "string.h"
 
@@ -32,7 +33,7 @@ void disp_init(void) {
 	// __disable_irq();
 	LCD_INIT();
 	// __enable_irq();
-//	disp.page_last_update_tick = get_tick();
+	//	disp.page_last_update_tick = get_tick();
 }
 
 /**
@@ -98,17 +99,22 @@ void disp_update(void) {
 	disp.cur_screen ^= 1; // toggle screen buffer
 }
 
+extern char buf[1];
+
 static void disp_page(u32 tick) {
 	//	if (tick - disp.page_last_update_tick < 20)
 	//		return;
 
 	u8 r = 0;
 
-	 disp_prints(0, r++, "Test 2: %d", tick);
+	disp_prints(0, r++, "Test: %d", get_tick());
+	disp_prints(0, r++, "Recv: %c", buf[0]);
 
 	switch (disp.cur_page) {
 		case HOME_PAGE: {
 			// disp_print_s(DISP_MAX_COL / 2 - 2, DISP_MAX_ROW - 1, "HOME");
+
+			r = music_display(r);
 		} break;
 		case RH_PAGE: {
 			r = rh_controller_page(r);
@@ -123,6 +129,7 @@ static void disp_page(u32 tick) {
 inline void disp_set_page(Display_Page_t page) { disp.cur_page = page; }
 
 void disp_clear(void) { memset(disp.buf, 0, DISP_MAX_ROW * DISP_MAX_COL); }
+
 
 void display_task(void const* arguments) {
 	disp_init();

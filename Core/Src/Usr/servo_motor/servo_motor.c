@@ -5,7 +5,7 @@
 
 #include "Usr/servo_motor/servo_motor.h"
 
-#include "main.h"
+//#include "main.h"
 
 #include "cmsis_os.h"
 
@@ -21,7 +21,13 @@
 #define servo_pos_to_ccr(pos) \
 	((((float)pos / (u8)0xFF) * (SERVO_MAX_DUTY - SERVO_MIN_DUTY) + SERVO_MIN_DUTY) * tim->ARR)
 
-static inline TIM_HandleTypeDef* servo_get_tim_handle(u8 tid) { return (tid == 2) ? &htim2 : (tid == 3) ? &htim3 : 0; }
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim5;
+
+static inline TIM_HandleTypeDef* servo_get_tim_handle(u8 tid) { return (tid == 2) ? &htim2 :
+																		(tid == 3) ? &htim3 :
+																				(tid == 5) ? &htim5:0; }
 
 static inline u32 servo_get_tim_channel(u8 chid) { return TIM_CHANNEL_1 + 4 * (chid - 1); }
 
@@ -32,52 +38,57 @@ Servo_Controller_t servo[NUM_SERVOS] = {
 	[0] =
 		{
 			.htim = 2,
-			.ch = 1,
+			.ch = 3,
 		},
 	[1] =
 		{
 			.htim = 2,
-			.ch = 2,
+			.ch = 0,
 		},
 	[2] =
 		{
-			.htim = 2,
-			.ch = 3,
+			.htim = 3,
+			.ch = 1,
 			.init = true,
 		},
 	[3] =
 		{
-			.htim = 2,
-			.ch = 0,
+			.htim = 3,
+			.ch = 2,
 			.init = true,
 		},
 	[4] =
 		{
-			.htim = 3,
-			.ch = 1,
+			.htim = 5,
+			.ch = 3,
 		},
 };
 
 // ====================================================================================================================
 
+
 void servo_init(void) {
 	for (u8 servo_id = 0; servo_id < NUM_SERVOS; ++servo_id) {
-		//				servo[servo_id].init = true;
+		servo[servo_id].init = true;
 	}
 
 	TIM2->PSC = SERVO_PSC;
 	TIM2->ARR = SERVO_ARR;
-	//	TIM3->PSC = SERVO_PSC;
-	//	TIM3->ARR = SERVO_ARR;
+		TIM3->PSC = SERVO_PSC;
+		TIM3->ARR = SERVO_ARR;
+		TIM5->PSC = SERVO_PSC;
+		TIM5->ARR = SERVO_ARR;
 
-	//	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-	//	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-	//	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+		HAL_TIM_PWM_Start(&htim5, TIM_CHANNEL_3);
 }
 
-__forceinline TIM_TypeDef* servo_get_tim(u8 tid) { return (tid == 2) ? TIM2 : TIM3; }
+__forceinline TIM_TypeDef* servo_get_tim(u8 tid) { return (tid == 2) ? TIM2 :
+														(tid == 3) ? TIM3:
+																TIM5; }
 
 inline void servo_set_target_pos(u8 servo_id, u8 tar) {
 	servo[servo_id].tar_pos = tar;
@@ -105,7 +116,7 @@ inline void servo_apply(void) {
 			case 0: tim->CCR4 = ccr; break;
 			default: break;
 		}
-		TIM2->CCR4 = servo_pos_to_ccr(255);
+//		TIM2->CCR4 = servo_pos_to_ccr(255);
 
 		_s.last_apply_tick = tick;
 	}
@@ -123,18 +134,18 @@ void servo_update(u32 tick) {
 }
 
 static void servo_test(void) {
-	//	servo_set_target_pos((get_tick() / 2000) % 5, (get_tick() % 20000 < 10000) ? 255 : 0);
-	servo_set_target_pos(2, (get_tick() % 2000 < 1000) ? 255 : 0);
-	servo_set_target_pos(3, (get_tick() % 2000 < 1000) ? 255 : 0);
+		servo_set_target_pos((get_tick() / 2000) % 5, (get_tick() % 20000 < 10000) ? 255 : 0);
+//	servo_set_target_pos(2, (get_tick() % 2000 < 1000) ? 255 : 0);
+//	servo_set_target_pos(3, (get_tick() % 2000 < 1000) ? 255 : 0);
 }
 
 
-void servo_task(void* const args) {
+void servo_task(void const* args) {
 	servo_init();
 
 	u32 tick = get_tick();
 	while (1) {
-		// servo_test();
+//		 servo_test();
 		servo_apply();
 		servo_update(tick);
 		osDelay(4);

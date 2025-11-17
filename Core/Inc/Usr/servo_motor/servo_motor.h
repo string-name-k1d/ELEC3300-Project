@@ -57,6 +57,6 @@ void servo_set_target_pos(u8 servo_id, u8 tar);
 i8 servo_get_pos(u8 servo_id);
 void servo_apply(void);
 void servo_update(u32 tick);
-void servo_task(void* const args);
+void servo_task(void const *args);
 
 #endif /* INC_SERVO_MOTOR_SERVO_MOTOR_H_ */

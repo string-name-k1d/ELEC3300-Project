@@ -19,6 +19,7 @@ RM := rm -rf
 -include Core/Src/Usr/utils/subdir.mk
 -include Core/Src/Usr/servo_motor/subdir.mk
 -include Core/Src/Usr/robot_hand/subdir.mk
+-include Core/Src/Usr/music_reader/subdir.mk
 -include Core/Src/Usr/lcd/subdir.mk
 -include Core/Src/Usr/glove_sensor/subdir.mk
 -include Core/Src/Usr/communication/subdir.mk

@@ -24,6 +24,7 @@ SUBDIRS := \
 Core/Src/Usr/communication \
 Core/Src/Usr/glove_sensor \
 Core/Src/Usr/lcd \
+Core/Src/Usr/music_reader \
 Core/Src/Usr/robot_hand \
 Core/Src/Usr/servo_motor \
 Core/Src/Usr/utils \

@@ -1,8 +1,6 @@
 /*
  * hand_control.h
  *
- *  Created on: Oct 31, 2025
- *      Author: dik21
  */
 
 #ifndef INC_ROBOT_HAND_HAND_CONTROL_H_
@@ -19,7 +17,7 @@
 /**
  * Represents physical hand state for each finger's position
  */
-typedef struct {
+typedef struct __attribute__((__packed__)) {
 	u8 finger_0_play : 1;
 	u8 finger_1_play : 1;
 	u8 finger_2_play : 1;
@@ -30,18 +28,28 @@ typedef struct {
 /**
  * Logic control states for hand controller
  */
-typedef enum {
+typedef enum __attribute__((__packed__)) {
 	RH_TEST,
 	RH_IDLE,
 	RH_MANUAL,
 	RH_PLAYSONG,
 } RH_Controller_State;
 
+typedef u8 RH_Controller_Substate_t;
+
+typedef enum __attribute__((__packed__)) {
+	RH_MANUAL_MIRROR = 0,
+	RH_MANUAL_RECORD,
+	RH_MANUAL_REPLAY,
+} RH_Controller_Manual_Substate_t;
+
 /**
  * Logic controller for robot hand
  */
 typedef struct {
 	RH_Controller_State state;
+	RH_Controller_Substate_t substate;
+
 	RH_Hand_State_t hand_state;
 
 	Servo_Controller_t* finger;

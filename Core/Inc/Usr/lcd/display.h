@@ -52,8 +52,8 @@ typedef struct {
 
 void disp_init(void);
 
-char* const disp_get_buf_addr(DISP_COORDS);
-#define disp_print(col, row, ...) sprintf(disp_get_buf_addr(col, row), __VA_ARGS__);
+//char* const disp_get_buf_addr(DISP_COORDS);
+//#define disp_print(col, row, ...) sprintf(disp_get_buf_addr(col, row), __VA_ARGS__);
 u8 disp_prints(DISP_COORDS, const char* str, ...);
 
 
